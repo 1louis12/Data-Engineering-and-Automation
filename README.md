@@ -24,10 +24,10 @@ Takeaway: **Terraform, Kubernetes and Airflow** combine high demand and competit
 | Level | Folder | Milestone | Status |
 |:---:|---|---|:---:|
 | 1 | [`01_EDA`](./01_EDA) | Exploratory data analysis with SQL and DuckDB | Done |
-| 2 | `02_Python_ETL` | Build a Python pipeline that extracts, cleans and loads data | Planned |
+| 2 | [`02_BUILD_DW`](./02_BUILD_DW) | Build a Data Warehouse (Star Schema) and Data Marts with DuckDB | Done |
 | 3 | `03_Docker` | Containerize the pipeline for reproducible runs | Planned |
 | 4 | `04_CI_CD` | Automate tests and checks with GitHub Actions or Gitlab-ci | Planned |
-| 5 | `05_Terraform` | Provision cloud infrastructure as code (AWS) | Planned |
+| 5 | `05_Terraform` | Provision cloud infrastructure as code (AWS or local) | Planned |
 | 6 | `06_Airflow` | Orchestrate and schedule the pipeline | Planned |
 | 7 | `07_Data_Quality` | Add data tests and validation (dbt / Great Expectations) | Planned |
 | 8 | `08_Kubernetes` | Deploy containers on a Kubernetes cluster | Planned |
@@ -48,9 +48,18 @@ Use case: a student wants to know which skills to learn for data engineering job
 
 **Skills practiced:** SQL, joins, aggregation, `MEDIAN`, `HAVING`, DuckDB, MotherDuck, interpreting results.
 
-### Level 2: Python ETL (planned)
+### Level 2: Build Data Warehouse (completed)
 
-Move from querying data to building a pipeline: extract raw data, clean it with Python, load it into DuckDB. Goal: a script that runs end to end with one command.
+**Folder:** [`02_BUILD_DW`](./02_BUILD_DW)
+
+Use case: transition from raw data to a structured Data Warehouse to power reporting and analytics efficiently.
+
+- Created a core Data Warehouse using a Star Schema (fact and dimension tables).
+- Loaded data from CSVs and enforced referential integrity checks.
+- Built specific business-focused Data Marts: a denormalized flat mart, a skills demand mart, an incrementally updated priority jobs mart, and a complex company prospecting mart.
+- Orchestrated the entire build process into a single pipeline.
+
+**Skills practiced:** Data Modeling (Star Schema), Dimensional Data Marts, Incremental updates (`MERGE`), Data Types (STRUCT, ARRAY), Idempotency, Pipeline orchestration via SQL.
 
 ### Level 3: Docker (planned)
 
@@ -86,14 +95,16 @@ Combine everything into one project: infrastructure with Terraform, pipeline in 
 
 ## Repository structure
 
-```
+```text
 .
 ├── README.md              <- this roadmap
 ├── 01_EDA/                <- Level 1 (done)
 │   ├── README.md
 │   └── *.sql
-├── 02_Python_ETL/         <- next
-├── 03_Docker/
+├── 02_BUILD_DW/           <- Level 2 (done)
+│   ├── README.md
+│   └── *.sql
+├── 03_Docker/             <- next
 ├── 04_CI_CD/
 ├── 05_Terraform/
 ├── 06_Airflow/
@@ -101,25 +112,3 @@ Combine everything into one project: infrastructure with Terraform, pipeline in 
 ├── 08_Kubernetes/
 ├── 09_Monitoring/
 └── 10_Capstone/
-```
-
-Folders for future levels are added as I start them.
-
-## How I work
-
-- One folder per level, each with a README explaining the goal, the tools and the result.
-- Small, frequent commits with clear messages.
-- Every level ends with something that runs and can be shown.
-
-## Tools
-
-DuckDB, MotherDuck, SQL, Python, Docker, GitHub Actions, Terraform, AWS, Airflow, dbt, Kubernetes.
-
-## Credits
-
-Dataset by **Luke Barousse**. All credit for the data goes to him.
-
-## Contact
-
-Student, open to internships and junior DevOps / DataOps opportunities.
-GitHub: [@1louis12](https://github.com/1louis12)
