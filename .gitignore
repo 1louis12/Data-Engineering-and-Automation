@@ -1,3 +1,12 @@
 CSV
 *.duckdb
 .DS_Store
+
+venv/
+data/
+transform/target/
+transform/dbt_packages/
+transform/logs/
+*.duckdb
+*.duckdb.wal
+__pycache__/
