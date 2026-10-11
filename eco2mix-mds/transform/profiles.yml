@@ -2,12 +2,14 @@ transform:
   outputs:
     dev:
       type: duckdb
-      path: dev.duckdb
+      path: ../data/eco2mix_dev.duckdb
       threads: 1
 
     prod:
       type: duckdb
-      path: prod.duckdb
+      path: ../data/eco2mix_prod.duckdb
       threads: 4
 
   target: dev
+
+  
