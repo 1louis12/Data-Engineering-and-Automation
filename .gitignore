@@ -10,3 +10,5 @@ transform/logs/
 *.duckdb
 *.duckdb.wal
 __pycache__/
+*.log
+logs/
