@@ -1,0 +1,22 @@
+SELECT
+    code_insee_region,
+    region,
+    nature,
+    TRY_CAST(date_locale AS date)          AS date_locale,
+    TRY_CAST(date_heure AS timestamptz)    AS date_heure,
+    TRY_CAST(consommation_mw AS double)    AS consommation_mw,
+    TRY_CAST(thermique_mw AS double)       AS thermique_mw,
+    TRY_CAST(nucleaire_mw AS double)       AS nucleaire_mw,
+    TRY_CAST(eolien_mw AS double)          AS eolien_mw,
+    TRY_CAST(solaire_mw AS double)         AS solaire_mw,
+    TRY_CAST(hydraulique_mw AS double)     AS hydraulique_mw,
+    TRY_CAST(bioenergies_mw AS double)     AS bioenergies_mw,
+    TRY_CAST(pompage_mw AS double)         AS pompage_mw,
+    TRY_CAST(ech_physiques_mw AS double)   AS ech_physiques_mw,
+    TRY_CAST(tco_thermique AS double)      AS tco_thermique,
+    TRY_CAST(tco_nucleaire AS double)      AS tco_nucleaire,
+    TRY_CAST(tco_eolien AS double)         AS tco_eolien,
+    TRY_CAST(tco_solaire AS double)        AS tco_solaire,
+    TRY_CAST(tco_hydraulique AS double)    AS tco_hydraulique,
+    TRY_CAST(tco_bioenergies AS double)    AS tco_bioenergies
+FROM {{ ref('eco2mix_rename') }}

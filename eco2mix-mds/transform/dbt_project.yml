@@ -32,5 +32,16 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   transform:
     # Config indicated by + and applies to all files under models/example/
-    example:
+    staging:
+    #we exeptionaly choose table because view will query millions of raw everysection
       +materialized: view
+      eco2mix_regional_cons_def_stage:
+        +materialized: table
+    intermediate:
+      +materialized: view
+      eco2mix_daily_consomation_intermadiate:
+        +materialized: table
+    exploration:
+      +materialized: view
+    marts:
+      +materialized: table

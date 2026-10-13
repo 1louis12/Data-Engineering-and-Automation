@@ -1,0 +1,22 @@
+# transform/models/intermediate/eco2mix/_int_eco2mix_models.yml
+version: 2
+
+models:
+  - name: int_eco2mix_production_intermediate
+    description: "Production totale et renouvelable (MW) par demi-heure. Les filières NULL comptent pour 0 dans la somme. Lignes sans consommation exclues."
+    columns:
+      - name: production_totale_mw
+        description: "thermique + nucléaire + éolien + solaire + hydraulique + bioénergies. Exclut pompage et échanges."
+      - name: nb_filieres_null
+        description: "Nombre de filières manquantes sur la ligne (qualité)."
+
+  - name: eco2mix_daily_consomation_intermediate
+    description: "Énergie (GWh) par région et par jour, avec min/max/moyenne de puissance."
+    columns:
+      - name: jour
+        tests: [not_null]
+      - name: nb_mesures
+        description: "Nombre de demi-heures agrégées (48 pour un jour complet)."
+        tests:
+          - dbt_utils.accepted_range:
+              max_value: 48
