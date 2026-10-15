@@ -14,8 +14,6 @@ Extensions possibles : `Evidence` (visualisation), `Meltano` (extraction/chargem
 - [x] **Étape 2** : nettoyage (staging `base_` → `stg_`), production totale, grain journalier, tests, documentation
 - [x] **Étape 3** : 7 requêtes d'exploration (agrégation, pivot, fenêtre glissante, variation, cumul, CTE récursive, cube)
 - [x] **Étape 4** : entrepôt en étoile (3 dimensions + faits), températures, cuboïde, mise à jour incrémentale
-- [ ] **Étape 5** (bonus) : comparaison des formats CSV / JSON / Parquet / DuckDB / Arrow
-- [ ] Visualisation avec Evidence (optionnel)
 
 ## Mise en route
 
