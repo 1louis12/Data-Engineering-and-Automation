@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: dim_temps
+    description: "Dimension temps, un jour par ligne : jour, mois, trimestre, saison, année, période."
+    columns:
+      - name: jour
+        data_tests: [not_null, unique]
+
+  - name: dim_geographie
+    description: "Dimension géographie : région, quart (zone), pays."
+    columns:
+      - name: code_insee_region
+        data_tests: [not_null, unique]
+
+  - name: dim_temperature
+    description: "Dimension température : degré entier, intervalle, ligne 'inconnue' (-999)."
+    columns:
+      - name: temperature_key
+        data_tests: [not_null, unique]
+      - name: intervalle
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['glacial', 'froid', 'modéré', 'idéal', 'chaud', 'extrême', 'inconnue']
+
+  - name: fct_energie_journaliere
+    description: "Faits : énergie (GWh) par région et par jour, par filière, taux de couverture (%), températures. Incrémental."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [jour, code_insee_region]
+    columns:
+      - name: jour
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_temps')
+                field: jour
+      - name: code_insee_region
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_geographie')
+                field: code_insee_region
+      - name: temperature_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_temperature')
+                field: temperature_key
+      - name: statut_rang
+        description: "1 = définitif, 2 = consolidé, 3 = temps réel (pire statut des demi-heures du jour)."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3]
