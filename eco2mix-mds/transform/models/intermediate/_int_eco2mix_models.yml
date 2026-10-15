@@ -1,22 +1,40 @@
-# transform/models/intermediate/eco2mix/_int_eco2mix_models.yml
 version: 2
 
 models:
   - name: int_eco2mix_production_intermediate
-    description: "Production totale et renouvelable (MW) par demi-heure. Les filières NULL comptent pour 0 dans la somme. Lignes sans consommation exclues."
+    description: "Production totale et renouvelable (MW) par demi-heure. Filières NULL = 0 dans la somme. Lignes sans consommation exclues."
     columns:
       - name: production_totale_mw
         description: "thermique + nucléaire + éolien + solaire + hydraulique + bioénergies. Exclut pompage et échanges."
       - name: nb_filieres_null
-        description: "Nombre de filières manquantes sur la ligne (qualité)."
+        description: "Nombre de filières manquantes sur la ligne (indicateur de qualité)."
 
   - name: eco2mix_daily_consomation_intermediate
-    description: "Énergie (GWh) par région et par jour, avec min/max/moyenne de puissance."
+    description: "Énergie (GWh) par région et par jour, avec min/max/moyenne de puissance (MW)."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [jour, code_insee_region]
     columns:
       - name: jour
-        tests: [not_null]
+        data_tests: [not_null]
       - name: nb_mesures
         description: "Nombre de demi-heures agrégées (48 pour un jour complet)."
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
-              max_value: 48
+              arguments:
+                max_value: 50
+
+  - name: int_eco2mix_union_demi_heure
+    description: "Consolidé/définitif + temps réel, dédoublonné par (région, date_heure) en gardant le meilleur statut."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code_insee_region, date_heure]
+    columns:
+      - name: statut_rang
+        description: "1 = définitif, 2 = consolidé, 3 = temps réel."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3]

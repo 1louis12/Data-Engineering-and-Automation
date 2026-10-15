@@ -21,18 +21,17 @@ Takeaway: **Terraform, Kubernetes and Airflow** combine high demand and competit
 
 ## Roadmap
 
-| Level | Folder | Milestone | Status |
-|:---:|---|---|:---:|
-| 1 | [`01_EDA`](./01_EDA) | Exploratory data analysis with SQL and DuckDB | Done |
-| 2 | [`02_BUILD_DW`](./02_BUILD_DW) | Build a Data Warehouse (Star Schema) and Data Marts with DuckDB | Done |
-| 3 | `03_Docker` | Containerize the pipeline for reproducible runs | Planned |
-| 4 | `04_CI_CD` | Automate tests and checks with GitHub Actions or Gitlab-ci | Planned |
-| 5 | `05_Terraform` | Provision cloud infrastructure as code (AWS or local) | Planned |
-| 6 | `06_Airflow` | Orchestrate and schedule the pipeline | Planned |
-| 7 | `07_Data_Quality` | Add data tests and validation (dbt / Great Expectations) | Planned |
-| 8 | `08_Kubernetes` | Deploy containers on a Kubernetes cluster | Planned |
-| 9 | `09_Monitoring` | Logging, alerts and observability | Planned |
-| 10 | `10_Capstone` | End-to-end project combining all levels | Planned |
+- [x] **Level 1** - [`01_EDA`](./01_EDA): Exploratory data analysis with SQL and DuckDB
+- [x] **Level 2** - [`02_BUILD_DW`](./02_BUILD_DW): Data Warehouse (Star Schema) and Data Marts with DuckDB
+- [x] **Bonus project** - [`eco2mix-mds`](./eco2mix-mds): Modern Data Stack with dbt + DuckDB (ELT, advanced SQL / OLAP, star schema, incremental load, data tests)
+- [ ] **Level 3** - `03_Docker`: Containerize the pipeline for reproducible runs
+- [ ] **Level 4** - `04_CI_CD`: Automate tests and checks with GitHub Actions or GitLab CI
+- [ ] **Level 5** - `05_Terraform`: Provision cloud infrastructure as code (AWS or local)
+- [ ] **Level 6** - `06_Airflow`: Orchestrate and schedule the pipeline
+- [ ] **Level 7** - `07_Data_Quality`: Add data tests and validation (dbt / Great Expectations). *Started in `eco2mix-mds` (65 dbt tests); the dedicated level is still to do.*
+- [ ] **Level 8** - `08_Kubernetes`: Deploy containers on a Kubernetes cluster
+- [ ] **Level 9** - `09_Monitoring`: Logging, alerts and observability
+- [ ] **Level 10** - `10_Capstone`: End-to-end project combining all levels
 
 ## Level details
 
@@ -61,13 +60,33 @@ Use case: transition from raw data to a structured Data Warehouse to power repor
 
 **Skills practiced:** Data Modeling (Star Schema), Dimensional Data Marts, Incremental updates (`MERGE`), Data Types (STRUCT, ARRAY), Idempotency, Pipeline orchestration via SQL.
 
+### Bonus project: eco2mix-mds, Modern Data Stack (completed up to step 4)
+
+**Folder:** [`eco2mix-mds`](./eco2mix-mds)
+
+Use case: analyze French regional electricity production and consumption (open data from RTE / ODRE) with an ELT pipeline where dbt handles the transformations and DuckDB the storage.
+
+Project steps:
+
+- [x] **Step 0** - Environment: venv, dbt-duckdb, profile versioned in the repo
+- [x] **Step 1** - Extraction and sources: CSVs downloaded by script, read by dbt through `external_location`
+- [x] **Step 2** - Cleaning: layered staging (`base_` then `stg_`), total production, daily grain, docs and tests
+- [x] **Step 3** - Seven advanced SQL queries: aggregation, pivot, sliding window, lag variation, running total, recursive CTE, ROLLUP cube
+- [x] **Step 4** - Data warehouse: star schema (3 dimensions + fact table), temperature dataset, cuboid query, incremental update (real-time, consolidated, definitive data)
+- [ ] **Step 5** (bonus) - Storage format benchmark: CSV / JSON / Parquet / DuckDB / Arrow
+- [ ] Visualization with Evidence (optional)
+
+Adding a table to the warehouse only takes a new `.sql` file in `models/marts/`.
+
+**Skills practiced:** dbt (sources, models, seeds, tests, docs, incremental models), layered modelling (staging / intermediate / marts), window functions, recursive CTEs, `ROLLUP` / `GROUPING SETS`, star schema, incremental `delete+insert`, data quality tests.
+
 ### Level 3: Docker (planned)
 
 Package the pipeline in a container so it runs the same on any machine. Goal: `docker run` reproduces the full pipeline.
 
 ### Level 4: CI/CD (planned)
 
-Add GitHub Actions to run linting and tests on every push. Goal: no broken code reaches `main`.
+Add GitHub Actions to run linting and tests on every push. Goal: no broken code reaches `main`. (`eco2mix-mds` is a good candidate: `dbt build` on the synthetic sample data in CI.)
 
 ### Level 5: Terraform (planned)
 
@@ -104,6 +123,10 @@ Combine everything into one project: infrastructure with Terraform, pipeline in 
 ├── 02_BUILD_DW/           <- Level 2 (done)
 │   ├── README.md
 │   └── *.sql
+├── eco2mix-mds/           <- Bonus: dbt + DuckDB project (done up to step 4)
+│   ├── README.md
+│   ├── scripts/
+│   └── transform/         <- dbt project (staging, intermediate, exploration, marts)
 ├── 03_Docker/             <- next
 ├── 04_CI_CD/
 ├── 05_Terraform/
@@ -112,3 +135,4 @@ Combine everything into one project: infrastructure with Terraform, pipeline in 
 ├── 08_Kubernetes/
 ├── 09_Monitoring/
 └── 10_Capstone/
+```

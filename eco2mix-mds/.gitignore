@@ -1,0 +1,11 @@
+data/*
+!data/.gitkeep
+transform/target/
+transform/dbt_packages/
+transform/logs/
+*.duckdb
+*.duckdb.wal
+transform/.user.yml
+migration_backup_*/
+__pycache__/
+.DS_Store

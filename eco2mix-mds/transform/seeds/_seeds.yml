@@ -1,0 +1,10 @@
+version: 2
+
+seeds:
+  - name: ref_zones_regions
+    description: "Seed : rattachement de chaque région à une zone (NO, NE, SO, SE, IdF). Découpage choisi par l'auteur, à justifier dans le README."
+    columns:
+      - name: region
+        data_tests: [not_null, unique]
+      - name: zone
+        data_tests: [not_null]

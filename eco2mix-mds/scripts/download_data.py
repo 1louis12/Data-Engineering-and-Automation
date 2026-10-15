@@ -1,13 +1,12 @@
-# scripts/download_data.py
-"""Download the 3 ODRE datasets as CSV into ./data"""
+"""Télécharge les 3 jeux de données ODRÉ en CSV dans ./data (idempotent)."""
 import urllib.request
 from pathlib import Path
 
 BASE = "https://opendata.reseaux-energies.fr/api/explore/v2.1/catalog/datasets"
 DATASETS = [
-    "eco2mix-regional-cons-def",        # consolidated + definitive (2013 ->)
-    "eco2mix-regional-tr",              # real time (recent months)
-    "temperature-quotidienne-regionale" # daily temperatures (used in step 4)
+    "eco2mix-regional-cons-def",         # consolidé + définitif (2013 ->)
+    "eco2mix-regional-tr",               # temps réel (derniers mois)
+    "temperature-quotidienne-regionale", # températures quotidiennes (2016 ->)
 ]
 
 data_dir = Path(__file__).resolve().parent.parent / "data"
@@ -17,8 +16,8 @@ for name in DATASETS:
     url = f"{BASE}/{name}/exports/csv?delimiter=%3B"   # %3B = ';'
     dest = data_dir / f"{name}.csv"
     if dest.exists():
-        print(f"skip {dest.name} (already there)")
+        print(f"skip {dest.name} (déjà présent)")
         continue
-    print(f"downloading {name} ...")
+    print(f"téléchargement {name} ...")
     urllib.request.urlretrieve(url, dest)
-    print(f"  -> {dest} ({dest.stat().st_size / 1e6:.1f} MB)")
+    print(f"  -> {dest} ({dest.stat().st_size / 1e6:.1f} Mo)")

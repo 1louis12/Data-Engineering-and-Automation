@@ -29,17 +29,33 @@ clean-targets:         # directories to be removed by `dbt clean`
 # In this example config, we tell dbt to build all models in the example/
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
+
 models:
+  # Une couche = un dossier = une responsabilité.
+  #   staging      : nettoyage mécanique (raw -> rename -> type -> stage)
+  #   intermediate : calculs et changements de grain
+  #   exploration  : requêtes SQL avancées
+  #   marts        : entrepôt (faits + dimensions). Un nouveau .sql ici = une nouvelle table.
   transform:
-    # Config indicated by + and applies to all files under models/example/
     staging:
-    #we exeptionaly choose table because view will query millions of raw everysection
       +materialized: view
+      eco2mix_raw:
+        +schema: base
+      eco2mix_rename:
+        +schema: base
+      eco2mix_type:
+        +schema: base
       eco2mix_regional_cons_def_stage:
+        +materialized: table
+      stg_eco2mix_tr:
+        +materialized: table
+      stg_temperature_quotidienne:
         +materialized: table
     intermediate:
       +materialized: view
-      eco2mix_daily_consomation_intermadiate:
+      eco2mix_daily_consomation_intermediate:
+        +materialized: table
+      int_eco2mix_union_demi_heure:
         +materialized: table
     exploration:
       +materialized: view
