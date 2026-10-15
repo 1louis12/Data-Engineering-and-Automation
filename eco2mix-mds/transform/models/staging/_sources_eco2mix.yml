@@ -2,11 +2,11 @@ version: 2
 
 sources:
   - name: raw_eco2mix
-    description: "Raw eCO2mix CSV extracts from the ODRE portal."
+    description: "CSV bruts ODRÉ lus directement par DuckDB (couche raw = fichiers de data/)."
     meta:
       external_location: "read_csv('../data/{name}.csv', delim=';', header=true, all_varchar=true)"
     tables:
       - name: eco2mix-regional-cons-def
-        description: "Regional data, consolidated and definitive."
+        description: "éCO2mix régional, données consolidées et définitives."
       - name: eco2mix-regional-tr
-        description: "Regional data, real time (recent months)."
+        description: "éCO2mix régional, temps réel (derniers mois)."

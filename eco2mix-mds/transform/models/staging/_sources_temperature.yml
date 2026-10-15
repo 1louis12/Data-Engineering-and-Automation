@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw_temperature
+    meta:
+      external_location: "read_csv('../data/{name}.csv', delim=';', header=true, all_varchar=true)"
+    tables:
+      - name: temperature-quotidienne-regionale
+        description: "Températures quotidiennes régionales (min, max, moyenne), depuis 2016."

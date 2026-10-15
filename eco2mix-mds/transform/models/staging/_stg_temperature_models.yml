@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: stg_temperature_quotidienne
+    description: "Températures quotidiennes régionales (°C), un relevé par région et par jour."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code_insee_region, jour]
+    columns:
+      - name: jour
+        data_tests: [not_null]
+      - name: code_insee_region
+        data_tests: [not_null]

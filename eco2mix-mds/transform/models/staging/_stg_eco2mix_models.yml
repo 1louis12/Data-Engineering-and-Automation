@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: eco2mix_raw
+    description: "Copie brute du CSV éCO2mix consolidé/définitif (tout en texte)."
+
+  - name: eco2mix_rename
+    description: "Étape 1 : renommage des colonnes (unité dans le nom). Tout reste en texte. Colonnes parasites supprimées."
+  - name: eco2mix_type
+    description: "Étape 2 : conversion de types (try_cast). Une valeur invalide devient NULL."
+
+  - name: eco2mix_regional_cons_def_stage
+    description: "éCO2mix régional consolidé/définitif, typé. Une ligne par région et par demi-heure."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [code_insee_region, date_heure]
+    columns:
+      - name: code_insee_region
+        data_tests: [not_null]
+      - name: date_heure
+        data_tests: [not_null]
+      - name: nature
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Données définitives', 'Données consolidées']
+      - name: consommation_mw
+        description: "Puissance moyenne consommée sur la demi-heure (MW)."
+      - name: pompage_mw
+        description: "Consommation des STEP (MW), valeur négative."
+      - name: ech_physiques_mw
+        description: "Échanges physiques : positif = export, négatif = import. Pas de la production."
+
+  - name: stg_eco2mix_tr
+    description: "éCO2mix régional temps réel, typé. Une ligne par région et par demi-heure."
+    columns:
+      - name: code_insee_region
+        data_tests: [not_null]
+      - name: date_heure
+        data_tests: [not_null]
