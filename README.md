@@ -73,8 +73,6 @@ Project steps:
 - [x] **Step 2** - Cleaning: layered staging (`base_` then `stg_`), total production, daily grain, docs and tests
 - [x] **Step 3** - Seven advanced SQL queries: aggregation, pivot, sliding window, lag variation, running total, recursive CTE, ROLLUP cube
 - [x] **Step 4** - Data warehouse: star schema (3 dimensions + fact table), temperature dataset, cuboid query, incremental update (real-time, consolidated, definitive data)
-- [ ] **Step 5** (bonus) - Storage format benchmark: CSV / JSON / Parquet / DuckDB / Arrow
-- [ ] Visualization with Evidence (optional)
 
 Adding a table to the warehouse only takes a new `.sql` file in `models/marts/`.
 
