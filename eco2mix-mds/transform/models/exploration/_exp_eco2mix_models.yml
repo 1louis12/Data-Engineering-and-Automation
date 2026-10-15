@@ -1,0 +1,98 @@
+version: 2
+
+models:
+  - name: exp_01_mensuel_region
+    description: "Q1 - Production et consommation (GWh), puis min/max/moyenne de puissance (MW), par mois et par région."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [mois, region]
+    columns:
+      - name: mois
+        data_tests: [not_null]
+      - name: region
+        data_tests: [not_null]
+      - name: consommation_gwh
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+  - name: exp_02_pivot_conso_regions
+    description: "Q2 - Pivot (CASE WHEN) : consommation journalière (GWh), une colonne par région, une ligne par jour."
+    columns:
+      - name: jour
+        data_tests: [not_null, unique]
+
+  - name: exp_03_conso_mois_glissant
+    description: "Q3 - Consommation nationale (GWh) du jour et somme sur le mois glissant (fenêtre RANGE, bornes incluses)."
+    columns:
+      - name: jour
+        data_tests: [not_null, unique]
+      - name: conso_mois_ecoule_gwh
+        data_tests: [not_null]
+
+  - name: exp_04_variations_quotidienne
+    description: "Q4 - Les 20 plus grands écarts de consommation nationale (GWh) d'un jour à l'autre."
+    columns:
+      - name: jour
+        data_tests: [not_null, unique]
+      - name: ecart_abs_gwh
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+  - name: exp_05_jour_depassement_renouvelables
+    description: "Q5 - Pour chaque année complète, premier jour où la consommation cumulée atteint la production renouvelable annuelle."
+    columns:
+      - name: annee
+        data_tests: [not_null, unique]
+      - name: jour_de_lannee
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 366
+
+  - name: exp_06_sequences_hausse
+    description: "Q6 - Les 3 plus longues séquences de hausse stricte de la consommation instantanée (CTE récursive)."
+    columns:
+      - name: rang
+        data_tests:
+          - not_null
+          - unique
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3]
+      - name: date_heure
+        data_tests: [not_null]
+      - name: region
+        data_tests: [not_null]
+      - name: duree
+        data_tests: [not_null]
+      - name: sequence_mw
+        data_tests: [not_null]
+
+  - name: exp_07_cube_consommation
+    description: "Q7 - Cube de la consommation (GWh) : temps (jour, mois, année, période) x géographie (région, zone, France). 12 niveaux."
+    columns:
+      - name: niveau_temps
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['jour', 'mois', 'annee', 'toute_la_periode']
+      - name: niveau_geo
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['region', 'zone', 'france_metropolitaine']
+      - name: consommation_gwh
+        data_tests: [not_null]
+
+  - name: exp_08_cuboide_mois_quart_temperature
+    description: "Étape 4 - Cuboïde : énergie (GWh) et taux de couverture par mois, quart et intervalle de température."
